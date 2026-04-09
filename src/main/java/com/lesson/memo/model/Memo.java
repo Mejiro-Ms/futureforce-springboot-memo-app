@@ -39,6 +39,5 @@ public class Memo {
     
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    
-    
+       
 }
