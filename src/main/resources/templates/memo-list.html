@@ -17,17 +17,34 @@
                 <i class="ri-add-circle-line"></i> 新規メモ
             </a>
         </div>
+		
+		<div class="search-bar">
+		    <form action="#" method="get" class="search-form">
+		        <input type="text" name="keyword" placeholder="キーワードを入力"
+		               th:value="${keyword}">
+		        <button type="submit" class="btn btn-primary">検索</button>
+		    </form>
+		</div>
 
         <div class="notes-grid">
             <div class="note-card" th:each="memo : ${memos}">
                 <div class="note-card-header">
                     <h3 class="note-card-title" th:text="${memo.title}">タイトル</h3>
-                </div>
+					
+					<span class="note-badge"
+						  th:if="${memo.priority != null}"
+				          th:classappend="${memo.priority.name().toLowerCase()}"
+					      th:text="${memo.priority.label}">
+					</span>
+			   </div>
+			   
                 <div class="note-card-content">
                     <p class="note-card-text" th:text="${memo.content}">内容</p>
                 </div>
-                <div class="note-card-footer">
+				
+                <div class="note-card-footer">					
                     <p class="note-date" th:text="${#temporals.format(memo.createdAt, 'yyyy/MM/dd HH:mm')}">日付</p>
+					
                     <div class="note-actions">
                         <a th:href="@{|/memo/detail/${memo.id}|}" class="btn btn-primary">詳細</a>
                         <a th:href="@{|/memo/delete/${memo.id}|}" class="btn btn-danger">
@@ -47,3 +64,4 @@
 </body>
 
 </html>
+

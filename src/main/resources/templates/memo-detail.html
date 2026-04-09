@@ -16,16 +16,26 @@
             <a th:href="@{/memo}" class="btn btn-outline"><i class="ri-arrow-left-line"></i> 戻る</a>
         </div>
         <div class="note-card note-card-large">
-            <div class="note-card-header">
+           <div class="note-card-header">
                 <h2 class="note-card-title" th:text="${memo.title}">タイトル</h2>
-            </div>
+ 
+			<span class="note-badge"
+				th:if="${memo.priority != null}"
+				th:classappend="${memo.priority.name().toLowerCase()}"
+				th:text="${memo.priority.label}">
+			</span>
+		   </div>
             <div class="note-card-content">
                 <p class="note-card-text" th:text="${memo.content}">本文</p>
             </div>
 
             <div class="note-card-footer detail-footer">
-                <p class="note-date" th:text="${#temporals.format(memo.createdAt, 'yyyy/MM/dd HH:mm')}">作成日時</p>
-                <div class="note-actions">
+				
+				<p class="note-date"
+				       th:text="${#temporals.format(memo.createdAt, 'yyyy/MM/dd HH:mm')}">
+				</p>
+					
+				<div class="note-actions">
                     <a th:href="@{|/memo/edit/${memo.id}|}" class="btn btn-primary">編集</a>
                     <a th:href="@{|/memo/delete/${memo.id}|}" class="btn btn-danger">
                         削除
@@ -33,6 +43,7 @@
                 </div>
             </div>
         </div>
+		
     </div>
     <script th:src="@{/js/common.js}"></script>
 </body>
