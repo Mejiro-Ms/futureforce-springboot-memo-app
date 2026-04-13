@@ -42,9 +42,12 @@ public class MemoController {
         return "memo-list";
     }
     
-    
     @GetMapping("/search")
     public String search(@RequestParam String keyword, Model model) {
+
+    	if (keyword == null || keyword.isEmpty()) {
+            return "redirect:/memo";
+        }
 
         List<Memo> memos = memoRepository
             .findByTitleContainingOrContentContainingOrderByPriorityAscCreatedAtDesc(keyword, keyword);
@@ -54,8 +57,7 @@ public class MemoController {
 
         return "memo-list";
     }
-
-
+    
     @GetMapping("/new")
     public String showForm(Model model) {
         model.addAttribute("memo", new Memo());
