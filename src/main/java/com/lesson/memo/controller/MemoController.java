@@ -26,6 +26,7 @@ import com.lesson.memo.repository.MemoRepository;
 @RequestMapping("/memo")
 public class MemoController {
 
+	
     @Autowired
     private MemoRepository memoRepository;
 
