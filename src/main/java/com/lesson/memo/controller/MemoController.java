@@ -29,11 +29,11 @@ public class MemoController {
 	
     @Autowired
     private MemoRepository memoRepository;
-
+   
     
     @GetMapping
     public String list(Model model) {
-    	    List<Memo> memos = memoRepository.findAllByOrderByPriorityAscCreatedAtDesc();
+        List<Memo> memos = memoRepository.findAllByOrderByPriorityAscCreatedAtDesc();
         model.addAttribute("memos", memos);
         return "memo-list";
     }

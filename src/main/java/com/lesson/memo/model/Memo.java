@@ -39,7 +39,8 @@ public class Memo {
     private LocalDateTime updatedAt;
     
     @NotNull(message = "優先度を選択してください")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private Priority priority;
-       
+     
+    
 }
