@@ -33,18 +33,21 @@ public class MemoController {
    
     
     @GetMapping
-    public String list(@RequestParam(required = false) String keyword, Model model) {
+    public String list(Model model) {
 
-        List<Memo> memos;
+        List<Memo> memos = memoRepository.findAllByOrderByPriorityAscCreatedAtDesc();
 
-        if (keyword != null && !keyword.isEmpty()) {
-            // キーワードあり → 部分一致検索
-            memos = memoRepository
-                    .findByTitleContainingOrContentContainingOrderByPriorityAscCreatedAtDesc(keyword, keyword);
-        } else {
-            // キーワードなし → 全件取得
-            memos = memoRepository.findAllByOrderByPriorityAscCreatedAtDesc();
-        }
+        model.addAttribute("memos", memos);
+
+        return "memo-list";
+    }
+    
+    
+    @GetMapping("/search")
+    public String search(@RequestParam String keyword, Model model) {
+
+        List<Memo> memos = memoRepository
+            .findByTitleContainingOrContentContainingOrderByPriorityAscCreatedAtDesc(keyword, keyword);
 
         model.addAttribute("memos", memos);
         model.addAttribute("keyword", keyword);
@@ -79,7 +82,7 @@ public class MemoController {
         Optional<Memo> memo = memoRepository.findById(id);
         if (memo.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return "not-found"; // エラー画面にリダイレクト
+            return "not-found"; 
         }
 
         model.addAttribute("memo", memo.get());
@@ -114,7 +117,7 @@ public class MemoController {
         Optional<Memo> opt = memoRepository.findById(id);
         if (opt.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return "not-found"; // エラー画面表示
+            return "not-found"; 
         }
 
         Memo memoToUpdate = opt.get();
@@ -122,7 +125,7 @@ public class MemoController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.memo", result);
             redirectAttributes.addFlashAttribute("memo", memo);
-            return "redirect:/memo/edit/" + id; // editにリダイレクト
+            return "redirect:/memo/edit/" + id; 
         }
 
         memoToUpdate.setTitle(memo.getTitle());

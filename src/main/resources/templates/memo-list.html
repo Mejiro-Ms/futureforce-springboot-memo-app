@@ -19,7 +19,7 @@
         </div>
 		
 		<div class="search-bar">
-				    <form action="#" method="get" class="search-form">
+			        <form th:action="@{/memo/search}" method="get" class="search-form">
 				        <input type="text" name="keyword" placeholder="キーワードを入力"
 				               th:value="${keyword}">
 				        <button type="submit" class="btn btn-primary">検索</button>
