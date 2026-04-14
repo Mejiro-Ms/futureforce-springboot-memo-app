@@ -42,5 +42,4 @@ public class Memo {
     @Enumerated(EnumType.ORDINAL)
     private Priority priority;
      
-    
 }
