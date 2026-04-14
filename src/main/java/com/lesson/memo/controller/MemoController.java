@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lesson.memo.model.Memo;
@@ -33,13 +34,33 @@ public class MemoController {
     
     @GetMapping
     public String list(Model model) {
+
         List<Memo> memos = memoRepository.findAllByOrderByPriorityAscCreatedAtDesc();
+
         model.addAttribute("memos", memos);
+
         return "memo-list";
     }
+    
+    @GetMapping("/search")
+    public String search(@RequestParam String keyword, Model model) {
+      	String trimmedKeyword = keyword.trim();
 
+        if (trimmedKeyword.isEmpty()) {
+            return "redirect:/memo";
+        }
+
+        List<Memo> memos = memoRepository
+            .findByTitleContainingOrContentContainingOrderByPriorityAscCreatedAtDesc(keyword, keyword);
+
+        model.addAttribute("memos", memos);
+        model.addAttribute("keyword", keyword);
+
+        return "memo-list";
+    }
+    
     @GetMapping("/new")
-    public String showForm(Model model) {
+    public String showForm(Model model){
         model.addAttribute("memo", new Memo());
         model.addAttribute("priorities", Priority.values());
         return "memo-form";
@@ -47,8 +68,8 @@ public class MemoController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute @Valid Memo memo,
-            BindingResult result) {
-        if (result.hasErrors()) {
+            BindingResult result){
+        if (result.hasErrors()){
             return "memo-form";
         }
 
@@ -64,7 +85,7 @@ public class MemoController {
         Optional<Memo> memo = memoRepository.findById(id);
         if (memo.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return "not-found"; // エラー画面にリダイレクト
+            return "not-found"; 
         }
 
         model.addAttribute("memo", memo.get());
@@ -99,7 +120,7 @@ public class MemoController {
         Optional<Memo> opt = memoRepository.findById(id);
         if (opt.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return "not-found"; // エラー画面表示
+            return "not-found"; 
         }
 
         Memo memoToUpdate = opt.get();
@@ -107,7 +128,7 @@ public class MemoController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.memo", result);
             redirectAttributes.addFlashAttribute("memo", memo);
-            return "redirect:/memo/edit/" + id; // editにリダイレクト
+            return "redirect:/memo/edit/" + id; 
         }
 
         memoToUpdate.setTitle(memo.getTitle());
