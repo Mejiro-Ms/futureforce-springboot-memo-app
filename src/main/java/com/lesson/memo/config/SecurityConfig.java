@@ -2,7 +2,6 @@ package com.lesson.memo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,14 +23,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder adminPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(adminDetailService);
-        provider.setPasswordEncoder(adminPasswordEncoder());
-        return provider;
     }
 
     @Bean
@@ -61,8 +52,6 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/admin/signin?logout")
                 .permitAll()
             );
-
-        http.authenticationProvider(authenticationProvider());
 
         return http.build();
     }
