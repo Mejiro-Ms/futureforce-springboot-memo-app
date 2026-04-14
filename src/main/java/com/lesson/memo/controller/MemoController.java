@@ -44,8 +44,9 @@ public class MemoController {
     
     @GetMapping("/search")
     public String search(@RequestParam String keyword, Model model) {
+      	String trimmedKeyword = keyword.trim();
 
-    	if (keyword == null || keyword.isEmpty()) {
+        if (trimmedKeyword.isEmpty()) {
             return "redirect:/memo";
         }
 
@@ -59,7 +60,7 @@ public class MemoController {
     }
     
     @GetMapping("/new")
-    public String showForm(Model model) {
+    public String showForm(Model model){
         model.addAttribute("memo", new Memo());
         model.addAttribute("priorities", Priority.values());
         return "memo-form";
@@ -67,8 +68,8 @@ public class MemoController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute @Valid Memo memo,
-            BindingResult result) {
-        if (result.hasErrors()) {
+            BindingResult result){
+        if (result.hasErrors()){
             return "memo-form";
         }
 
