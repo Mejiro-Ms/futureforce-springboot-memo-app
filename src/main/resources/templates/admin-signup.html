@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理者登録</title>
+</head>
+<body>
+
+<h2>管理者登録</h2>
+
+<form method="post" action="/admin/signup" th:object="${admin}">
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <div>
+        <label>姓：</label>
+        <input type="text" th:field="*{lastName}" required>
+        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+    </div>
+
+    <div>
+        <label>名：</label>
+        <input type="text" th:field="*{firstName}" required>
+        <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+    </div>
+
+    <div>
+        <label>メールアドレス：</label>
+        <input type="email" th:field="*{email}" required>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+
+    <div>
+        <label>パスワード：</label>
+        <input type="password" th:field="*{password}" required>
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+
+    <button type="submit">登録</button>
+</form>
+
+<p>
+    <a href="/admin/signin">ログインはこちら</a>
+</p>
+
+</body>
+</html>
